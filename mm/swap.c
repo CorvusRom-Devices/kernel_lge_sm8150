@@ -927,7 +927,7 @@ static void __pagevec_lru_add_fn(struct page *page, struct lruvec *lruvec,
 			SetPageWorkingset(page);
 	}
 
-	trace_mm_lru_insertion(page, lru);
+	trace_mm_lru_insertion(page);
 }
 
 /*
