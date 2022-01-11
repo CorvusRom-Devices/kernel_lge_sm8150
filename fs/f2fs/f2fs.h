@@ -571,9 +571,16 @@ enum {
 };
 
 #define DEFAULT_RETRY_IO_COUNT	8	/* maximum retry read IO or flush count */
-
-/* congestion wait timeout value, default: 20ms */
-#define	DEFAULT_IO_TIMEOUT	(msecs_to_jiffies(20))
+/* congestion wait timeout value */
+#if defined(CONFIG_HZ_1000)
+#define	DEFAULT_IO_TIMEOUT	(msecs_to_jiffies(2))
+#elif defined(CONFIG_HZ_300)
+#define	DEFAULT_IO_TIMEOUT	(msecs_to_jiffies(6))
+#elif defined(CONFIG_HZ_250) || defined(CONFIG_HZ_240)
+#define	DEFAULT_IO_TIMEOUT	(msecs_to_jiffies(8))
+#elif defined(CONFIG_HZ_100) || defined(CONFIG_HZ_120) || defined(CONFIG_HZ_80)
+#define	DEFAULT_IO_TIMEOUT	(msecs_to_jiffies(10))
+#endif
 
 /* maximum retry quota flush count */
 #define DEFAULT_RETRY_QUOTA_FLUSH_COUNT		8
