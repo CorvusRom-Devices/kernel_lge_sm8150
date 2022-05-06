@@ -1284,15 +1284,6 @@ struct atgc_management {
 	unsigned long long age_threshold;	/* age threshold */
 };
 
-struct f2fs_gc_control {
-	unsigned int victim_segno;	/* target victim segment number */
-	int init_gc_type;		/* FG_GC or BG_GC */
-	bool no_bg_gc;			/* check the space and stop bg_gc */
-	bool should_migrate_blocks;	/* should migrate blocks */
-	bool err_gc_skipped;		/* return EAGAIN if GC skipped */
-	unsigned int nr_free_secs;	/* # of free sections to do GC */
-};
-
 /* For s_flag in struct f2fs_sb_info */
 enum {
 	SBI_IS_DIRTY,				/* dirty flag for checkpoint */
