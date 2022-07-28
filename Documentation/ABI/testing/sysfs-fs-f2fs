@@ -38,8 +38,7 @@ Description:	This parameter controls the number of prefree segments to be
 What:		/sys/fs/f2fs/<disk>/main_blkaddr
 Date:		November 2019
 Contact:	"Ramon Pantin" <pantin@google.com>
-Description:
-		 Shows first block address of MAIN area.
+Description:	Shows first block address of MAIN area.
 
 What:		/sys/fs/f2fs/<disk>/ipu_policy
 Date:		November 2013
@@ -338,7 +337,7 @@ Date		April 2019
 Contact:	"Daniel Rosenberg" <drosen@google.com>
 Description:	If checkpoint=disable, it displays the number of blocks that
 		are unusable.
-		If checkpoint=enable it displays the enumber of blocks that
+		If checkpoint=enable it displays the number of blocks that
 		would be unusable if checkpoint=disable were to be set.
 
 What:		/sys/fs/f2fs/<disk>/encoding
