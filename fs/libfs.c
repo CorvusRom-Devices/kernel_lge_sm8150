@@ -1271,7 +1271,7 @@ bool is_empty_dir_inode(struct inode *inode)
  *
  * Return: if names will need casefolding
  */
-static bool needs_casefold(const struct inode *dir)
+bool needs_casefold(const struct inode *dir)
 {
 	return IS_CASEFOLDED(dir) && dir->i_sb->s_encoding;
 }

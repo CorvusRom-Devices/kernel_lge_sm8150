@@ -1175,7 +1175,7 @@ static int cbq_init(struct Qdisc *sch, struct nlattr *opt)
 	if ((q->link.R_tab = qdisc_get_rtab(r, tb[TCA_CBQ_RTAB])) == NULL)
 		return -EINVAL;
 
-	err = tcf_block_get(&q->link.block, &q->link.filter_list);
+	err = tcf_block_get(&q->link.block, &q->link.filter_list, sch);
 	if (err)
 		goto put_rtab;
 
