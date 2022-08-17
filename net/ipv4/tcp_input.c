@@ -127,6 +127,8 @@ int sysctl_tcp_invalid_ratelimit __read_mostly = HZ/2;
 #define FLAG_FORWARD_PROGRESS	(FLAG_ACKED|FLAG_DATA_SACKED)
 #endif
 
+#define FLAG_ACK_MAYBE_DELAYED	0x10000 /* Likely a delayed ACK */
+
 #define TCP_REMNANT (TCP_FLAG_FIN|TCP_FLAG_URG|TCP_FLAG_SYN|TCP_FLAG_PSH)
 #define TCP_HP_BITS (~(TCP_RESERVED_BITS|TCP_FLAG_PSH))
 
@@ -3015,11 +3017,18 @@ static void tcp_fastretrans_alert(struct sock *sk, const int acked,
 	*rexmit = REXMIT_LOST;
 }
 
-static void tcp_update_rtt_min(struct sock *sk, u32 rtt_us)
+static void tcp_update_rtt_min(struct sock *sk, u32 rtt_us, const int flag)
 {
 	struct tcp_sock *tp = tcp_sk(sk);
 	u32 wlen = sysctl_tcp_min_rtt_wlen * HZ;
 
+	if ((flag & FLAG_ACK_MAYBE_DELAYED) && rtt_us > tcp_min_rtt(tp)) {
+		/* If the remote keeps returning delayed ACKs, eventually
+		 * the min filter would pick it up and overestimate the
+		 * prop. delay when it expires. Skip suspected delayed ACKs.
+		 */
+		return;
+	}
 	minmax_running_min(&tp->rtt_min, wlen, tcp_jiffies32,
 			   rtt_us ? : jiffies_to_usecs(1));
 }
@@ -3059,7 +3068,7 @@ static bool tcp_ack_update_rtt(struct sock *sk, const int flag,
 	 * always taken together with ACK, SACK, or TS-opts. Any negative
 	 * values will be skipped with the seq_rtt_us < 0 check above.
 	 */
-	tcp_update_rtt_min(sk, ca_rtt_us);
+	tcp_update_rtt_min(sk, ca_rtt_us, flag);
 	tcp_rtt_estimator(sk, seq_rtt_us);
 #ifdef CONFIG_LGP_DATA_TCPIP_MPTCP
 	tp->ops->set_rto(sk);
@@ -3292,6 +3301,17 @@ static int tcp_clean_rtx_queue(struct sock *sk, int prior_fackets,
 	if (likely(first_ackt) && !(flag & FLAG_RETRANS_DATA_ACKED)) {
 		seq_rtt_us = tcp_stamp_us_delta(tp->tcp_mstamp, first_ackt);
 		ca_rtt_us = tcp_stamp_us_delta(tp->tcp_mstamp, last_ackt);
+
+		if (pkts_acked == 1 && last_in_flight < tp->mss_cache &&
+		    last_in_flight && !prior_sacked && fully_acked &&
+		    sack->rate->prior_delivered + 1 == tp->delivered &&
+		    !(flag & (FLAG_CA_ALERT | FLAG_SYN_ACKED))) {
+			/* Conservatively mark a delayed ACK. It's typically
+			 * from a lone runt packet over the round trip to
+			 * a receiver w/o out-of-order or CE events.
+			 */
+			flag |= FLAG_ACK_MAYBE_DELAYED;
+		}
 	}
 	if (sack->first_sackt) {
 		sack_rtt_us = tcp_stamp_us_delta(tp->tcp_mstamp, sack->first_sackt);
