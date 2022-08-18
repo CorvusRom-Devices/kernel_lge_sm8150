@@ -578,7 +578,7 @@ enum {
 #define	DEFAULT_IO_TIMEOUT	(msecs_to_jiffies(6))
 #elif defined(CONFIG_HZ_250) || defined(CONFIG_HZ_240)
 #define	DEFAULT_IO_TIMEOUT	(msecs_to_jiffies(8))
-#elif defined(CONFIG_HZ_100) || defined(CONFIG_HZ_120) || defined(CONFIG_HZ_80)
+#elif defined(CONFIG_HZ_100) || defined(CONFIG_HZ_120) || defined(CONFIG_HZ_80) || defined(CONFIG_HZ_50)
 #define	DEFAULT_IO_TIMEOUT	(msecs_to_jiffies(10))
 #endif
 
