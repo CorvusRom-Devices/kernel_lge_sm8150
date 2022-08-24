@@ -570,7 +570,7 @@ _Search3:
 			*op++ = (BYTE) lastRun;
 		} else
 			*op++ = (BYTE)(lastRun<<ML_BITS);
-		LZ4_memcpy(op, anchor, iend - anchor);
+		memcpy(op, anchor, iend - anchor);
 		op += iend - anchor;
 	}
 
@@ -638,6 +638,7 @@ int LZ4_loadDictHC(LZ4_streamHC_t *LZ4_streamHCPtr,
 	ctxPtr->end = (const BYTE *)dictionary + dictSize;
 	return dictSize;
 }
+EXPORT_SYMBOL(LZ4_loadDictHC);
 
 /* compression */
 
@@ -662,6 +663,7 @@ static void LZ4HC_setExternalDict(
 	/* match referencing will resume from there */
 	ctxPtr->nextToUpdate = ctxPtr->dictLimit;
 }
+EXPORT_SYMBOL(LZ4HC_setExternalDict);
 
 static int LZ4_compressHC_continue_generic(
 	LZ4_streamHC_t *LZ4_streamHCPtr,
@@ -726,6 +728,7 @@ int LZ4_compress_HC_continue(
 		return LZ4_compressHC_continue_generic(LZ4_streamHCPtr,
 			source, dest, inputSize, maxOutputSize, noLimit);
 }
+EXPORT_SYMBOL(LZ4_compress_HC_continue);
 
 /* dictionary saving */
 
@@ -760,6 +763,7 @@ int LZ4_saveDictHC(
 	}
 	return dictSize;
 }
+EXPORT_SYMBOL(LZ4_saveDictHC);
 
 MODULE_LICENSE("Dual BSD/GPL");
 MODULE_DESCRIPTION("LZ4 HC compressor");
