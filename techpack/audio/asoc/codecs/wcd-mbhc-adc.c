@@ -1337,7 +1337,7 @@ static irqreturn_t wcd_mbhc_adc_hs_rem_irq(int irq, void *data)
 			WCD_MBHC_REG_UPDATE_BITS(WCD_MBHC_HPHL_PA_EN, 1);
 			WCD_MBHC_REG_UPDATE_BITS(WCD_MBHC_HPH_PA_EN, 1);
 #ifdef CONFIG_MACH_LGE
-			if((snd_soc_read(mbhc->codec, 0x0609) & 0x80) != 0x1) {
+			if((snd_soc_read(mbhc->codec, 0x0609) & 0x80) == 0x0) {
 				pr_info("[LGE MBHC] %s: If HPHL PA didn't enabled, try again.\n", __func__);
 				WCD_MBHC_REG_UPDATE_BITS(WCD_MBHC_HPHL_PA_EN, 1);
 			}

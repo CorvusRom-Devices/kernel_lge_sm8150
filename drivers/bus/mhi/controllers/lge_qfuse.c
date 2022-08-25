@@ -23,7 +23,7 @@
 
 bool g_cpFused = false;
 
-static u32 qfprom_hw_key_read() {
+static u32 qfprom_hw_key_read(void) {
 	void __iomem *value_addr = NULL;
 	u32 value = 0;
 

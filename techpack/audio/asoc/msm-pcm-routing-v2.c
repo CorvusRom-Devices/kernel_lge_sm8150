@@ -1167,9 +1167,6 @@ static int msm_routing_get_adm_topology(int fedai_id, int session_type,
 	pr_debug("%s: fedai_id %d, session_type %d, be_id %d\n",
 	       __func__, fedai_id, session_type, be_id);
 
-	if (cal_data == NULL)
-		goto done;
-
 	app_type = fe_dai_app_type_cfg[fedai_id][session_type][be_id].app_type;
 	acdb_dev_id =
 		fe_dai_app_type_cfg[fedai_id][session_type][be_id].acdb_dev_id;
@@ -1190,8 +1187,6 @@ static int msm_routing_get_adm_topology(int fedai_id, int session_type,
 		if (topology < 0)
 			topology = NULL_COPP_TOPOLOGY;
 	}
-done:
-	pr_debug("%s: Using topology %d\n", __func__, topology);
 	return topology;
 }
 
@@ -17629,10 +17624,11 @@ static int msm_routing_put_stereo_to_custom_stereo_control(
 					goto skip_send_custom_stereo;
 				topo_id = adm_get_topology_for_port_copp_idx(
 					msm_bedais[be_index].port_id, idx);
-				if (topo_id < 0)
+				if (topo_id < 0) {
 					pr_debug("%s:Err:custom stereo topo %d",
 						 __func__, topo_id);
 					pr_debug("idx %d\n", idx);
+				}
 				if (topo_id == DS2_ADM_COPP_TOPOLOGY_ID)
 					rc = msm_ds2_dap_set_custom_stereo_onoff
 						(msm_bedais[be_index].port_id,
@@ -18506,7 +18502,7 @@ static int msm_routing_put_tx_cfg_control(struct snd_kcontrol *kcontrol,
 
     rc = q6adm_set_tx_cfg_parms(SLIMBUS_0_TX, tx_control_param);
     if ( rc < 0 ){
-        pr_info("%s, retry for SLIMBUS_1_TX");
+        pr_info("%s, retry for SLIMBUS_1_TX", __func__);
         rc = q6adm_set_tx_cfg_parms(SLIMBUS_1_TX, tx_control_param);
     }
 

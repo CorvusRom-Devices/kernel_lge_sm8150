@@ -1082,7 +1082,7 @@ static ssize_t tfa98xx_dbgfs_dsp_state_set(struct file *file,
 	struct i2c_client *i2c = file->private_data;
 	struct tfa98xx *tfa98xx = i2c_get_clientdata(i2c);
 	enum tfa_error ret;
-	char buf[32];
+	char buf[32] = {0};
 	const char start_cmd[] = "start";
 	const char stop_cmd[] = "stop";
 	const char mon_start_cmd[] = "monitor start";
@@ -4482,11 +4482,12 @@ static int tfa98xx_i2c_probe(struct i2c_client *i2c,
 	if (ret)
 		dev_info(&i2c->dev, "error creating sysfs files\n");
 	ret = device_create_bin_file(&i2c->dev, &dev_attr_reg);
-	if (ret)
+	if (ret) {
 		dev_info(&i2c->dev, "error creating sysfs files\n");
 
 		tfa98xx_log_i2c_devicenum = i2c->adapter->nr;
 		tfa98xx_log_i2c_slaveaddress = i2c->addr;
+	}
 
 	pr_info("%s: Probe completed successfully!\n", __func__);
 
