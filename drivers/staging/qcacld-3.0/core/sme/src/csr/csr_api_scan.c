@@ -1497,7 +1497,7 @@ static void csr_set_cfg_valid_channel_list(struct mac_context *mac,
  */
 static void csr_save_tx_power_to_cfg(struct mac_context *mac,
 				     tDblLinkList *pList,
-				     enum band_info band)
+				     uint32_t band)
 {
 	tListElem *pEntry;
 	uint32_t cbLen = 0, dataLen, tmp_len;

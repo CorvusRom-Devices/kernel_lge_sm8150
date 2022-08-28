@@ -452,7 +452,7 @@ enum tfa98xx_error tfa98xx_get_mtp
  */
 void tfa98xx_key2(tfa98xx_handle_t handle, int lock);
 
-int tfa_calibrate(tfa98xx_handle_t handle) ;
+enum tfa98xx_error tfa_calibrate(tfa98xx_handle_t handle) ;
 enum tfa98xx_error tfa_tfadsp_calibrate(tfa98xx_handle_t handle);
 enum tfa98xx_error tfa_calibration_range_check
 (tfa98xx_handle_t handle, unsigned int channel, int mohm);
