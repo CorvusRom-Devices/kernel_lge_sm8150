@@ -6317,9 +6317,3 @@ CONFIG_WCD_DSP_GLINK=y
 # CONFIG_WCD_SPI_AC is not set
 # CONFIG_WSA_MACRO is not set
 # CONFIG_XT_LOGGING is not set
-
-#
-# Qualcomm RmNet extensions
-#
-CONFIG_RMNET_PERF=y
-CONFIG_RMNET_SHS=y
